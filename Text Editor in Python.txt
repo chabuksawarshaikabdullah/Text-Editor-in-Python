@@ -1,0 +1,59 @@
+import os
+
+def main():
+    print("Welcome to Simple Text Editor")
+    print("Commands:")
+    print("1. new - Create a new file")
+    print("2. open <filename> - Open an existing file")
+    print("3. save - Save changes to the current file")
+    print("4. saveas <filename> - Save changes to a new file")
+    print("5. exit - Exit the text editor")
+
+    current_file = None
+    text = ""
+
+    while True:
+        command = input("\nEnter command: ").strip().lower()
+        
+        if command.startswith("new"):
+            current_file = None
+            text = ""
+            print("New file created.")
+        
+        elif command.startswith("open"):
+            _, filename = command.split(maxsplit=1)
+            if os.path.exists(filename):
+                with open(filename, "r") as file:
+                    text = file.read()
+                    current_file = filename
+                print(f"File '{filename}' opened successfully.")
+            else:
+                print(f"File '{filename}' does not exist.")
+        
+        elif command.startswith("save"):
+            if current_file:
+                with open(current_file, "w") as file:
+                    file.write(text)
+                print(f"Changes saved to '{current_file}'.")
+            else:
+                print("No file is currently open.")
+        
+        elif command.startswith("saveas"):
+            _, filename = command.split(maxsplit=1)
+            with open(filename, "w") as file:
+                file.write(text)
+            current_file = filename
+            print(f"Changes saved to '{filename}'.")
+        
+        elif command == "exit":
+            print("Exiting the text editor.")
+            break
+        
+        else:
+            print("Invalid command. Please try again.")
+
+        print("\nCurrent text:")
+        print(text)
+
+if __name__ == "__main__":
+    main()
